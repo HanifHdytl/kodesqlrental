@@ -1,0 +1,61 @@
+CREATE DATABASE rental;
+USE rental;
+
+CREATE TABLE customers (
+    id_customer INT PRIMARY KEY AUTO_INCREMENT,
+    nama VARCHAR(100) NOT NULL,
+    alamat TEXT NOT NULL,
+    no_telp VARCHAR(15) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE bicycles (
+    id_sepeda INT PRIMARY KEY AUTO_INCREMENT,
+    merk VARCHAR(50) NOT NULL,
+    tipe VARCHAR(50) NOT NULL,
+    warna VARCHAR(30) NOT NULL,
+    harga_sewa DECIMAL(10,2) NOT NULL,
+    status ENUM('Tersedia', 'Disewa') NOT NULL DEFAULT 'Tersedia',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE rentals (
+    id_rental INT PRIMARY KEY AUTO_INCREMENT,
+    id_customer INT NOT NULL,
+    id_sepeda INT NOT NULL,
+    tanggal_sewa DATETIME NOT NULL,
+    tanggal_kembali DATETIME DEFAULT NULL,
+    total_biaya DECIMAL(10,2) NOT NULL,
+    status ENUM('Disewa', 'Dikembalikan') NOT NULL DEFAULT 'Disewa',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Relasi ke tabel customers
+    FOREIGN KEY (id_customer) REFERENCES customers(id_customer) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Relasi ke tabel bicycles
+    FOREIGN KEY (id_sepeda) REFERENCES bicycles(id_sepeda) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE users (
+   id INT NOT NULL PRIMARY KEY,
+   username VARCHAR (50) NOT NULL,
+   password VARCHAR (50) NOT NULL
+);
+
+INSERT INTO users (`id`, `username`, `password`) VALUES
+(1, 'admin', 'admin123'),
+(2, 'operator', 'operator123');
+
+INSERT INTO customers (`id_customer`, `nama`, `alamat`, `no_telp`, `email`) VALUES
+(1, 'Hanif', 'Bukittinggi', '08846375825', 'hanif@gmail.com'),
+(2, 'Hilmi', 'candung', '088348284736', 'hilmi@gmail.com'),
+(3, 'Hasan', 'Agam', '083957382073', 'hasan@gmail.com'),
+(4, 'Alya', 'Padang Panjang', '083472648264', 'alya@gmail.com');
+
+INSERT INTO bicycles (`id_sepeda`, `merk`, `tipe`, `warna`, `harga_sewa`, `status`) VALUES
+(1, 'Polygon', 'BMX', 'Silver', '25.000', 'Tersedia'),
+(2, 'Trek', 'Ontel', 'Perak', '30.000', 'Tersedia'),
+(3, 'United', 'Gunung', 'Merah', '35.000', 'Tersedia'),
+(4, 'Wim Cycle', 'Roda Tiga', 'Putih', '15.000', 'Tersedia');
+
